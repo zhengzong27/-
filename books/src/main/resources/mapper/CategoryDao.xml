@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.app.dao.CategoryDao">
+
+    <insert id="insert">
+        insert into category(catename,createtime)values(#{catename},now())
+    </insert>
+
+    <update id="update">
+        update category set catename=#{catename},modifytime=now() where cateid=#{cateid}
+    </update>
+
+    <delete id="delete">
+        update category set deleted=1 where cateid=#{cid}
+    </delete>
+
+
+    <select id="listPager" resultType="com.book.app.bean.Category">
+      select * from category
+      <where>
+          <if test="catename!=null and catename!=''">
+              catename like '%${catename}%'
+          </if>
+          and deleted=0
+      </where>
+      limit #{page},#{size}
+
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(cateid) FROM category
+        <where>
+            <if test="catename!=null and catename!=''">
+                catename like '%${catename}%'
+            </if>
+            and deleted=0
+        </where>
+    </select>
+    <select id="searchCategories" resultType="com.book.app.bean.Category">
+        select * from category where deleted=0
+    </select>
+
+</mapper>

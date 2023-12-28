@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 132513
+    url: jdbc:mysql:///book?serverTimezone=UTC
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+logging:
+  level:
+    com:
+      book:
+        app:
+          dao: debug
+server:
+  port: 80
