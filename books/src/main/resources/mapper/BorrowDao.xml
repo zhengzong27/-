@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.app.dao.BorrowDao">
+    <insert id="borrowBook">
+        insert into borrow(bid,name,quantity,otime,tel)value(#{bid},#{name},#{quantity},now(),#{tel})
+    </insert>
+    <update id="update">
+        update borrow set stat=1,itime=now() where boid=#{boid}
+    </update>
+
+    <select id="list" resultType="com.book.app.bean.Borrow">
+        select * from borrow bo left join book b
+        on bo.bid=b.bid
+        <where>
+            <if test="name!=null and name!=''">
+                bo.name like '%${name}%'
+            </if>
+            <if test="bname!=null and bname!=''">
+                b.bname like '%${bname}%'
+            </if>
+            and bo.deleted=0
+        </where>
+        limit #{page} ,#{size}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(bo.boid) from borrow bo left join book b
+        on bo.bid=b.bid
+        <where>
+            <if test="name!=null and name!=''">
+                bo.name like '%${name}%'
+            </if>
+            <if test="bname!=null and bname!=''">
+                b.bname like '%${bname}%'
+            </if>
+            and bo.deleted=0
+        </where>
+    </select>
+    <select id="getNamesBorrowCount" resultType="com.book.app.bo.BorrowBo">
+        SELECT NAME ,COUNT(quantity) AS quantity FROM borrow WHERE deleted=0 GROUP BY NAME
+    </select>
+</mapper>
